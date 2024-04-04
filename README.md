@@ -25,6 +25,8 @@ Embeddium compatibility can be added by adding:
 
 NOTE: may not work on your modpack
 
+1.20.1 with Meteor Client v0.5.4
+
 ### Building
 
 -   Clone this repository
