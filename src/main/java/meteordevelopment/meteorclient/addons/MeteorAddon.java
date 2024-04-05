@@ -5,11 +5,16 @@
 
 package meteordevelopment.meteorclient.addons;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import meteordevelopment.meteorclient.utils.render.color.Color;
+import net.fabricmc.loader.api.FabricLoader;
 
 public abstract class MeteorAddon {
+    /** This field is automatically assigned from fabric.mod.json file. */
+    public String id;
+
     /** This field is automatically assigned from fabric.mod.json file. */
     public String name;
 
@@ -24,7 +29,15 @@ public abstract class MeteorAddon {
     public void onRegisterCategories() {}
 
     public abstract String getPackage();
-    public abstract URL getJarURL();
+    public URL getJarURL() {
+        try {
+            return FabricLoader.getInstance().getModContainer(id).get().getOrigin().getPaths().get(0).toUri().toURL();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     public String getWebsite() {
         return null;

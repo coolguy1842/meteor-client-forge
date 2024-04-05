@@ -47,7 +47,6 @@ public class MeteorClient implements ClientModInitializer {
     public static final String MOD_ID = "meteor-client";
     public static final ModMetadata MOD_META;
     public static final String NAME;
-    public static final String FILE_PATH;
     public static final  Version VERSION;
     public static final  String DEV_BUILD;
 
@@ -55,15 +54,18 @@ public class MeteorClient implements ClientModInitializer {
     public static MeteorAddon ADDON;
 
     public static MinecraftClient mc;
-    public static final IEventBus EVENT_BUS = new EventBus();
-    public static final File FOLDER = FabricLoader.getInstance().getGameDir().resolve(MOD_ID).toFile();
+    public static final IEventBus EVENT_BUS;
+    public static final File FOLDER;
     public static final Logger LOG;
 
     static {
+        EVENT_BUS = new EventBus();
+
         MOD_META = FabricLoader.getInstance().getModContainer(MOD_ID).orElseThrow().getMetadata();
-        FILE_PATH = FabricLoader.getInstance().getModContainer(MOD_ID).get().getOrigin().getPaths().get(0).toAbsolutePath().toString().replace("\\", "/");
 
         NAME = MOD_META.getName();
+        FOLDER = FabricLoader.getInstance().getGameDir().resolve(MOD_ID).toFile();
+
         LOG = LoggerFactory.getLogger(NAME);
 
         String versionString = MOD_META.getVersion().getFriendlyString();
@@ -84,18 +86,6 @@ public class MeteorClient implements ClientModInitializer {
         }
 
         LOG.info("Initializing {}", NAME);
-        LOG.info("test {}", FILE_PATH);
-
-        // URL url = FabricLoader.getInstance().getModContainer(MOD_ID).get().getOrigin().getPaths().get(0).toUri().toURL();
-
-        // Reflections reflections = new Reflections(
-        //     new ConfigurationBuilder()
-        //         .addUrls(url)
-        //         .addScanners(Scanners.MethodsAnnotated, Scanners.Resources)
-        // );
-
-        // Set<Method> methods = reflections.getMethodsAnnotatedWith(PreInit.class);
-        // LOG.info("methods: {}", methods.size());
 
         // Global minecraft client accessor
         mc = MinecraftClient.getInstance();

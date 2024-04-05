@@ -11,8 +11,6 @@ import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.fabricmc.loader.api.metadata.Person;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,17 +27,6 @@ public class AddonManager {
                 @Override
                 public String getPackage() {
                     return "meteordevelopment.meteorclient";
-                }
-
-                @Override
-                public URL getJarURL() {
-                    try {
-                        return FabricLoader.getInstance().getModContainer(MeteorClient.MOD_ID).get().getOrigin().getPaths().get(0).toUri().toURL();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-
-                    return null;
                 }
 
                 @Override
@@ -61,6 +48,7 @@ public class AddonManager {
 
             ModMetadata metadata = FabricLoader.getInstance().getModContainer(MeteorClient.MOD_ID).get().getMetadata();
 
+            MeteorClient.ADDON.id = metadata.getId();
             MeteorClient.ADDON.name = metadata.getName();
             MeteorClient.ADDON.authors = new String[metadata.getAuthors().size()];
             if (metadata.containsCustomValue(MeteorClient.MOD_ID + ":color")) {
@@ -83,6 +71,7 @@ public class AddonManager {
                 throw new RuntimeException("Exception during addon init \"%s\".".formatted(metadata.getName()), throwable);
             }
 
+            addon.id = metadata.getId();
             addon.name = metadata.getName();
 
             if (metadata.getAuthors().isEmpty()) throw new RuntimeException("Addon \"%s\" requires at least 1 author to be defined in it's fabric.mod.json. See https://fabricmc.net/wiki/documentation:fabric_mod_json_spec".formatted(addon.name));
