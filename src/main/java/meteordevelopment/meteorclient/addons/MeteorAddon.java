@@ -5,6 +5,7 @@
 
 package meteordevelopment.meteorclient.addons;
 
+import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -12,6 +13,9 @@ import meteordevelopment.meteorclient.utils.render.color.Color;
 import net.fabricmc.loader.api.FabricLoader;
 
 public abstract class MeteorAddon {
+    /** for addons */
+    public MethodHandles.Lookup lookup = MethodHandles.lookup();
+
     /** This field is automatically assigned from fabric.mod.json file. */
     public String id;
 

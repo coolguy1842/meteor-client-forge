@@ -23,7 +23,7 @@
 Embeddium compatibility can be added by adding:
 "embeddium": ["sodium"] to globalModAliases in .minecraft/config/connector.json
 
-NOTE: may not work on your modpack and addons won't work (event system doesnt work with addons)
+NOTE: may not work on your modpack and addons won't work without modifications (any function @EventHandler is used on must be public)
 
 1.20.1 with Meteor Client v0.5.4
 

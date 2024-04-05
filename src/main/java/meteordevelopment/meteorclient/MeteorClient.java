@@ -101,10 +101,10 @@ public class MeteorClient implements ClientModInitializer {
         AddonManager.init();
 
         // Register event handlers
-        EVENT_BUS.registerLambdaFactory(ADDON.getPackage() , (lookupInMethod, klass) -> (MethodHandles.Lookup) lookupInMethod.invoke(null, klass, MethodHandles.lookup()));
+        EVENT_BUS.registerLambdaFactory(ADDON.getPackage(), (lookupInMethod, klass) -> (MethodHandles.Lookup) lookupInMethod.invoke(null, klass, MethodHandles.lookup()));
         AddonManager.ADDONS.forEach(addon -> {
             try {
-                EVENT_BUS.registerLambdaFactory(addon.getPackage(), (lookupInMethod, klass) -> (MethodHandles.Lookup) lookupInMethod.invoke(null, klass, MethodHandles.lookup()));
+                EVENT_BUS.registerLambdaFactory(addon.getPackage(), (lookupInMethod, klass) -> addon.lookup);
             } catch (AbstractMethodError e) {
                 throw new RuntimeException("Addon \"%s\" is too old and cannot be ran.".formatted(addon.name), e);
             }
