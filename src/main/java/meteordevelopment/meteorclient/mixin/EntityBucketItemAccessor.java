@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import meteordevelopment.meteorclient.utils.EntityBucketItemTypes;
+import meteordevelopment.meteorclient.utils.entity.EntityBucketItemTypes;
 
 @Mixin(EntityBucketItem.class)
 public class EntityBucketItemAccessor {

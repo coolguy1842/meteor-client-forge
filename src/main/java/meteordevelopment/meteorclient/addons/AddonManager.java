@@ -11,6 +11,8 @@ import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.fabricmc.loader.api.metadata.Person;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,17 @@ public class AddonManager {
                 @Override
                 public String getPackage() {
                     return "meteordevelopment.meteorclient";
+                }
+
+                @Override
+                public URL getJarURL() {
+                    try {
+                        return FabricLoader.getInstance().getModContainer(MeteorClient.MOD_ID).get().getOrigin().getPaths().get(0).toUri().toURL();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+
+                    return null;
                 }
 
                 @Override

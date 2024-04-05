@@ -1,4 +1,4 @@
-package meteordevelopment.meteorclient.utils;
+package meteordevelopment.meteorclient.utils.entity;
 
 import java.util.WeakHashMap;
 

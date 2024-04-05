@@ -7,47 +7,26 @@ package meteordevelopment.meteorclient;
 
 import meteordevelopment.meteorclient.addons.AddonManager;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
-import meteordevelopment.meteorclient.commands.Commands;
 import meteordevelopment.meteorclient.events.game.OpenScreenEvent;
 import meteordevelopment.meteorclient.events.meteor.KeyEvent;
 import meteordevelopment.meteorclient.events.meteor.MouseButtonEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.gui.GuiThemes;
 import meteordevelopment.meteorclient.gui.WidgetScreen;
-import meteordevelopment.meteorclient.gui.renderer.GuiRenderer;
 import meteordevelopment.meteorclient.gui.tabs.Tabs;
-import meteordevelopment.meteorclient.renderer.Fonts;
-import meteordevelopment.meteorclient.renderer.GL;
-import meteordevelopment.meteorclient.renderer.PostProcessRenderer;
-import meteordevelopment.meteorclient.renderer.Renderer2D;
-import meteordevelopment.meteorclient.renderer.Shaders;
 import meteordevelopment.meteorclient.systems.Systems;
 import meteordevelopment.meteorclient.systems.config.Config;
 import meteordevelopment.meteorclient.systems.modules.Categories;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import meteordevelopment.meteorclient.systems.modules.misc.DiscordPresence;
+import meteordevelopment.meteorclient.utils.PostInit;
+import meteordevelopment.meteorclient.utils.PreInit;
+import meteordevelopment.meteorclient.utils.ReflectInit;
 import meteordevelopment.meteorclient.utils.Utils;
-import meteordevelopment.meteorclient.utils.misc.CPSUtils;
-import meteordevelopment.meteorclient.utils.misc.FakeClientPlayer;
-import meteordevelopment.meteorclient.utils.misc.MeteorStarscript;
-import meteordevelopment.meteorclient.utils.misc.Names;
 import meteordevelopment.meteorclient.utils.misc.Version;
 import meteordevelopment.meteorclient.utils.misc.input.KeyAction;
 import meteordevelopment.meteorclient.utils.misc.input.KeyBinds;
-import meteordevelopment.meteorclient.utils.network.Capes;
-import meteordevelopment.meteorclient.utils.network.MeteorExecutor;
 import meteordevelopment.meteorclient.utils.network.OnlinePlayers;
-import meteordevelopment.meteorclient.utils.player.ChatUtils;
-import meteordevelopment.meteorclient.utils.player.DamageUtils;
-import meteordevelopment.meteorclient.utils.player.EChestMemory;
-import meteordevelopment.meteorclient.utils.player.Rotations;
-import meteordevelopment.meteorclient.utils.render.PlayerHeadUtils;
-import meteordevelopment.meteorclient.utils.render.RenderUtils;
-import meteordevelopment.meteorclient.utils.render.color.RainbowColors;
-import meteordevelopment.meteorclient.utils.render.postprocess.ChamsShader;
-import meteordevelopment.meteorclient.utils.render.postprocess.PostProcessShaders;
-import meteordevelopment.meteorclient.utils.world.BlockIterator;
-import meteordevelopment.meteorclient.utils.world.BlockUtils;
 import meteordevelopment.orbit.EventBus;
 import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
@@ -57,6 +36,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,8 +84,18 @@ public class MeteorClient implements ClientModInitializer {
         }
 
         LOG.info("Initializing {}", NAME);
+        LOG.info("test {}", FILE_PATH);
 
-        MeteorClient.LOG.info("test {}", FILE_PATH);
+        // URL url = FabricLoader.getInstance().getModContainer(MOD_ID).get().getOrigin().getPaths().get(0).toUri().toURL();
+
+        // Reflections reflections = new Reflections(
+        //     new ConfigurationBuilder()
+        //         .addUrls(url)
+        //         .addScanners(Scanners.MethodsAnnotated, Scanners.Resources)
+        // );
+
+        // Set<Method> methods = reflections.getMethodsAnnotatedWith(PreInit.class);
+        // LOG.info("methods: {}", methods.size());
 
         // Global minecraft client accessor
         mc = MinecraftClient.getInstance();
@@ -130,28 +120,11 @@ public class MeteorClient implements ClientModInitializer {
             }
         });
 
-        // Pre init
-        Shaders.init();
-        MeteorExecutor.init();
+        // Register init classes
+        ReflectInit.registerPackages();
 
-        GuiThemes.init();
-        Tabs.init();
-        Fonts.refresh();
-        GL.init();
-        PostProcessRenderer.init();
-        PostProcessShaders.init();
-        Renderer2D.init();
-        Utils.init();
-        CPSUtils.init();
-        FakeClientPlayer.init();
-        MeteorStarscript.init();
-        Names.init();
-        Capes.init();
-        DamageUtils.init();
-        EChestMemory.init();
-        Rotations.init();
-        BlockIterator.init();
-        BlockUtils.init();
+        // Pre init
+        ReflectInit.init(PreInit.class);
 
         // Register module categories
         Categories.init();
@@ -172,14 +145,7 @@ public class MeteorClient implements ClientModInitializer {
         Systems.load();
 
         // Post init
-        Commands.init();
-        GuiThemes.postInit();
-        GuiRenderer.init();
-        ChatUtils.init();
-        PlayerHeadUtils.init();
-        RenderUtils.init();
-        RainbowColors.init();
-        ChamsShader.load();
+        ReflectInit.init(PostInit.class);
 
         // Save on shutdown
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

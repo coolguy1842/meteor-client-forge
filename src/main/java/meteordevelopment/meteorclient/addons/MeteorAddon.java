@@ -5,6 +5,8 @@
 
 package meteordevelopment.meteorclient.addons;
 
+import java.net.URL;
+
 import meteordevelopment.meteorclient.utils.render.color.Color;
 
 public abstract class MeteorAddon {
@@ -22,6 +24,7 @@ public abstract class MeteorAddon {
     public void onRegisterCategories() {}
 
     public abstract String getPackage();
+    public abstract URL getJarURL();
 
     public String getWebsite() {
         return null;
