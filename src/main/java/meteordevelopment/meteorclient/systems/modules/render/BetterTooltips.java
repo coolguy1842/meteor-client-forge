@@ -16,6 +16,7 @@ import meteordevelopment.meteorclient.mixin.EntityBucketItemAccessor;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Categories;
 import meteordevelopment.meteorclient.systems.modules.Module;
+import meteordevelopment.meteorclient.utils.EntityBucketItemTypes;
 import meteordevelopment.meteorclient.utils.Utils;
 import meteordevelopment.meteorclient.utils.misc.ByteCountDataOutput;
 import meteordevelopment.meteorclient.utils.misc.Keybind;
@@ -25,6 +26,8 @@ import meteordevelopment.meteorclient.utils.tooltip.*;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.block.entity.BannerPattern;
 import net.minecraft.block.entity.BannerPatterns;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.client.item.TooltipData;
 import net.minecraft.entity.Bucketable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -39,6 +42,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Formatting;
@@ -356,16 +360,17 @@ public class BetterTooltips extends Module {
         }
 
         // Fish peek
-        // TODO FISH
-        // else if (event.itemStack.getItem() instanceof Ent bucketItem && previewEntities()) {
-            // EntityType<?> type = ((EntityBucketItemAccessor) bucketItem).getEntityTypeSupplier().get();
-            // Entity entity = type.create(mc.world);
-            // if (entity != null) {
-            //     ((Bucketable) entity).copyDataFromNbt(event.itemStack.getOrCreateNbt());
-            //     ((EntityAccessor) entity).setInWater(true);
-            //     event.tooltipData = new EntityTooltipComponent(entity);
-            // }
-        // }
+        else if (event.itemStack.getItem() instanceof EntityBucketItem bucketItem && previewEntities()) {
+            EntityType<?> type = EntityBucketItemTypes.entityTypes.getOrDefault(bucketItem, null);
+            if(type == null) return;
+
+            Entity entity = type.create(mc.world);
+            if (entity != null) {
+                ((Bucketable) entity).copyDataFromNbt(event.itemStack.getOrCreateNbt());
+                ((EntityAccessor) entity).setInWater(true);
+                event.tooltipData = new EntityTooltipComponent(entity);
+            }
+        }
     }
 
     @EventHandler
