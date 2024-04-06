@@ -18,7 +18,7 @@
 
 ## Usage
 
-### REQUIRES SINYTRA & FORGIFIED FABRIC API & BARITONE FABRIC
+### REQUIRES SINYTRA CONNECTOR & BARITONE FABRIC
 
 Embeddium compatibility can be added by adding:
 "embeddium": ["sodium"] to globalModAliases in .minecraft/config/connector.json
